@@ -6,7 +6,7 @@ namespace App\Factory;
 
 use App\Message\CreateUser;
 
-interface UserMessageFactoryInterface
+interface CreateUserFactoryInterface
 {
     /**
      * I keep as much logic away from the controller as possible

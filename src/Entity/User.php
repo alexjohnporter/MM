@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+class User implements \JsonSerializable
 {
     public const MALE = 'm';
     public const FEMALE = 'f';
@@ -23,15 +23,15 @@ class User
 
     public function __construct(
         #[ORM\Id,
-    ORM\Column(type: "uuid", unique: true)]
-        private Uuid $id,
+    ORM\Column(type: "string", length: 38, unique: true)]
+        private string $id,
         #[ORM\Column(type: 'string', length: 180, unique: true)]
         private string $email,
         #[ORM\Column(type: 'string')]
         private string $password,
         #[ORM\Column(type: 'string')]
         private string $name,
-        #[ORM\Column(type: 'string', length: 1)]
+        #[ORM\Column(type: 'string', length: 1)] // I could use an ENUM here but performance wise, it's slower
         private string $gender,
         #[ORM\Column(type: 'integer')]
         private int $age,
@@ -41,7 +41,7 @@ class User
         }
     }
 
-    public function getId(): Uuid
+    public function getId(): string
     {
         return $this->id;
     }
@@ -69,5 +69,16 @@ class User
     public function getAge(): int
     {
         return $this->age;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+           'id' => $this->id,
+           'name' => $this->name,
+           'email' => $this->email,
+           'age' => $this->age,
+           'gender' => $this->gender
+        ];
     }
 }

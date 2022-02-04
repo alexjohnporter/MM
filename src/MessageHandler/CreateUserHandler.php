@@ -17,7 +17,7 @@ class CreateUserHandler
     ) {
     }
 
-    public function __invoke(CreateUser $message): User
+    public function __invoke(CreateUser $message): void
     {
         $user = new User(
             $message->getId(),
@@ -29,7 +29,5 @@ class CreateUserHandler
         );
 
         $this->userRepository->save($user);
-
-        return $user;
     }
 }

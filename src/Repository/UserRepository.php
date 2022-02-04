@@ -15,6 +15,16 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
         parent::__construct($registry, User::class);
     }
 
+    public function doesUserExist(string $id): bool
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->select('COUNT(u.id)')
+            ->where('u.id = :id')
+            ->setParameter('id', $id);
+
+        return (int)$qb->getQuery()->getSingleScalarResult() > 0;
+    }
+
     public function save(User $user): void
     {
         $this->_em->persist($user);

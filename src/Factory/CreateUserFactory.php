@@ -11,7 +11,7 @@ use Faker\Provider\Internet;
 use Faker\Provider\ka_GE\Person;
 use Symfony\Component\Uid\Uuid;
 
-class UserMessageFactory implements UserMessageFactoryInterface
+class CreateUserFactory implements CreateUserFactoryInterface
 {
     /**
      * I keep as much logic away from the controller as possible
@@ -27,7 +27,7 @@ class UserMessageFactory implements UserMessageFactoryInterface
         $faker = Factory::create();
 
         return new CreateUser(
-            Uuid::v4(),
+            (string)Uuid::v4(),
             $faker->email,
             $faker->password,
             $faker->name,

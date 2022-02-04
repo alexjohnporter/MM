@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace App\Message;
 
-use Symfony\Component\Uid\Uuid;
-
 class CreateUser implements \JsonSerializable
 {
     public function __construct(
-        private Uuid $id,
+        private string $id,
         private string $email,
         private string $password,
         private string $name,
@@ -18,7 +16,7 @@ class CreateUser implements \JsonSerializable
     ) {
     }
 
-    public function getId(): Uuid
+    public function getId(): string
     {
         return $this->id;
     }

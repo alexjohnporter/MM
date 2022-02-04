@@ -5,3 +5,11 @@ hello:
 create:
   path: /user/create
   controller: App\Controller\UserController::create
+
+swipe:
+  path: /swipe/{loggedInUser}/{swipedUser}/{attracted}
+  controller: App\Controller\UserController::swipe
+
+profiles:
+  path: /profiles
+  controller: App\Controller\UserController::profiles
