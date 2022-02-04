@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
@@ -10,18 +11,19 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
 {
-    const MALE = 'm';
-    const FEMALE = 'f';
-    const PREFER_NOT_TO_SAY = 'o';
+    public const MALE = 'm';
+    public const FEMALE = 'f';
+    public const PREFER_NOT_TO_SAY = 'o';
 
-    const GENDERS = [
+    public const GENDERS = [
         'Male' => self::MALE,
         'Female' => self::FEMALE,
         'Prefer not to say' => self::PREFER_NOT_TO_SAY
     ];
 
     public function __construct(
-        #[ORM\Id, ORM\Column(type: "uuid", unique: true)]
+        #[ORM\Id,
+    ORM\Column(type: "uuid", unique: true)]
         private Uuid $id,
         #[ORM\Column(type: 'string', length: 180, unique: true)]
         private string $email,

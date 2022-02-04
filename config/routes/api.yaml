@@ -1,3 +1,7 @@
 hello:
   path: /
   controller: App\Controller\UserController::hello
+
+create:
+  path: /user/create
+  controller: App\Controller\UserController::create
