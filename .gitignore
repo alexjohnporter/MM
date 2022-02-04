@@ -7,4 +7,6 @@
 /public/bundles/
 /var/
 /vendor/
+.idea/
+/docker/mysql/*
 ###< symfony/framework-bundle ###
