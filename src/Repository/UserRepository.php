@@ -30,20 +30,30 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
         string $loggedInUserId,
         int $minAge,
         int $maxAge,
-        string | null $gender = null
+        string $distanceSort,
+        string $gender
     ): array {
-        $sql = "SELECT id, email, name, gender, age FROM user 
+        $loggedInUser = $this->getUserById($loggedInUserId);
+        $lat = $loggedInUser->getCoordinates()->getLat();
+        $lon = $loggedInUser->getCoordinates()->getLon();
+
+        $sql = "SELECT id, email, name, gender, age, lat, lon, 
+            (3959 * acos(cos(radians('" . $lat . "')) * cos(radians(lat)) * cos(radians(lon) - 
+            radians('" . $lon . "')) + sin(radians('" . $lat . "')) * sin(radians(lat)))) AS distance 
+                FROM user 
                 WHERE id NOT IN 
                       (SELECT swiped_user_id
                       FROM user_swipe 
                       WHERE logged_in_user_id = :loggedInUserId
                     ) AND NOT id = :loggedInUserId
                     AND age > :minAge
-                    AND age < :maxAge";
+                    AND age < :maxAge ";
 
         if ($gender) {
-            $sql .= ' AND gender = :gender';
+            $sql .= ' AND gender = :gender ';
         }
+
+        $sql .= $distanceSort === 'DESC' ? 'ORDER BY distance DESC' : 'ORDER BY distance ASC';
 
         return $this->getEntityManager()->getConnection()->executeQuery(
             $sql,
@@ -51,7 +61,9 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
                 'loggedInUserId' => $loggedInUserId,
                 'minAge' => $minAge,
                 'maxAge' => $maxAge,
-                'gender' => $gender
+                'gender' => $gender,
+                'lat' => $lat,
+                'lon' => $lon,
             ]
         )->fetchAllAssociative();
     }

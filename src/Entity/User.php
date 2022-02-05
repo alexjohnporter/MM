@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Model\Coordinates;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
@@ -35,6 +36,10 @@ class User implements \JsonSerializable
         private string $gender,
         #[ORM\Column(type: 'integer')]
         private int $age,
+        #[ORM\Column(type: 'float')]
+        private float $lat,
+        #[ORM\Column(type: 'float')]
+        private float $lon,
         #[ORM\Column(type: 'string', nullable: true)]
         private string | null $authToken = null,
         #[ORM\Column(type: 'datetime', nullable: true)]
@@ -73,6 +78,14 @@ class User implements \JsonSerializable
     public function getAge(): int
     {
         return $this->age;
+    }
+
+    public function getCoordinates(): Coordinates
+    {
+        return new Coordinates(
+            $this->lat,
+            $this->lon
+        );
     }
 
     public function getAuthToken(): string | null

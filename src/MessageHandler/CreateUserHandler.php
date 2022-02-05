@@ -25,7 +25,9 @@ class CreateUserHandler
             $message->getPassword(),
             $message->getName(),
             $message->getGender(),
-            $message->getAge()
+            $message->getAge(),
+            $message->getCoordinates()->getLat(),
+            $message->getCoordinates()->getLon()
         );
 
         $this->userRepository->save($user);

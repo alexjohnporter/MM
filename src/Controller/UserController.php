@@ -71,6 +71,12 @@ class UserController extends AbstractController
                 'code' => $e->getCode(),
                 'data' => []
             ], JsonResponse::HTTP_NOT_FOUND);
+        } catch (\Throwable $t) {
+            return new JsonResponse([
+                'message' => 'An error has occurred',
+                'code' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'data' => []
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return new JsonResponse([
@@ -90,12 +96,14 @@ class UserController extends AbstractController
             $minAge = $request->query->getInt('minAge', 18);
             $maxAge = $request->query->getInt('maxAge', 99);
             $gender = $request->query->getAlpha('gender', '');
+            $distanceSort = $request->query->getAlpha('distance', 'desc');
 
             $userList = $this->profileListBuilder->getUnswipedProfilesForLoggedInUser(
                 $loggedInUser,
+                $gender,
+                $distanceSort,
                 $minAge,
-                $maxAge,
-                $gender
+                $maxAge
             );
         } catch (UserDoesNotExistException $e) {
             return new JsonResponse([
@@ -108,7 +116,13 @@ class UserController extends AbstractController
                 'message' => 'User is not authenticated',
                 'code' => JsonResponse::HTTP_FORBIDDEN,
                 'data' => []
-            ]);
+            ], JsonResponse::HTTP_FORBIDDEN);
+        } catch (\Throwable $t) {
+            return new JsonResponse([
+                'message' => 'An error has occurred',
+                'code' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'data' => []
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return new JsonResponse([
@@ -147,7 +161,13 @@ class UserController extends AbstractController
                 'message' => 'User is not authenticated',
                 'code' => JsonResponse::HTTP_FORBIDDEN,
                 'data' => []
-            ]);
+            ], JsonResponse::HTTP_FORBIDDEN);
+        } catch (\Throwable $t) {
+            return new JsonResponse([
+                'message' => 'An error has occurred',
+                'code' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'data' => []
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return new JsonResponse([

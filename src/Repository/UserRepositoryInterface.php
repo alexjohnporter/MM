@@ -14,7 +14,8 @@ interface UserRepositoryInterface
         string $loggedInUserId,
         int $minAge,
         int $maxAge,
-        string | null $gender = null
+        string $distanceSort,
+        string $gender,
     ): array;
     public function isUserAuthenticated(string $userId, string $token): bool;
     public function getUserById(string $userId): User;

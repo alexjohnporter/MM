@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Message;
 
+use App\Model\Coordinates;
+
 class CreateUser implements \JsonSerializable
 {
     public function __construct(
@@ -13,6 +15,7 @@ class CreateUser implements \JsonSerializable
         private string $name,
         private string $gender,
         private int $age,
+        private Coordinates $coordinates
     ) {
     }
 
@@ -46,6 +49,11 @@ class CreateUser implements \JsonSerializable
         return $this->age;
     }
 
+    public function getCoordinates(): Coordinates
+    {
+        return $this->coordinates;
+    }
+
     public function jsonSerialize()
     {
         return [
@@ -54,7 +62,8 @@ class CreateUser implements \JsonSerializable
             'email' => $this->email,
             'password' => $this->password,
             'age' => $this->age,
-            'gender' => $this->gender
+            'gender' => $this->gender,
+            'coordinates' => $this->coordinates->jsonSerialize()
         ];
     }
 }
