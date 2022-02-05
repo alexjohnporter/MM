@@ -87,7 +87,6 @@ class User implements \JsonSerializable
 
     public function authenticateUser(string $authToken): void
     {
-        //todo - add logout
         $this->authToken = $authToken;
         $this->authTokenExpires = (new \DateTime('now'))->add(new \DateInterval('PT10M'));
     }

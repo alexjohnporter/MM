@@ -50,6 +50,8 @@ class UserController extends AbstractController
 
     public function login(Request $request): JsonResponse
     {
+        //todo - could add a check to this function to see if the user is already logged in
+
         $email = $request->get('email');
         $password = $request->get('password');
 
@@ -85,7 +87,16 @@ class UserController extends AbstractController
         try {
             $this->authenticateUser($request, $loggedInUser);
 
-            $userList = $this->profileListBuilder->getUnswipedProfilesForLoggedInUser($loggedInUser);
+            $minAge = $request->query->getInt('minAge', 18);
+            $maxAge = $request->query->getInt('maxAge', 99);
+            $gender = $request->query->getAlpha('gender', '');
+
+            $userList = $this->profileListBuilder->getUnswipedProfilesForLoggedInUser(
+                $loggedInUser,
+                $minAge,
+                $maxAge,
+                $gender
+            );
         } catch (UserDoesNotExistException $e) {
             return new JsonResponse([
                 'message' => $e->getMessage(),
@@ -146,6 +157,11 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * I'd turn this into a trait for use in other controllers
+     * but seeing as there is only one controller, I've opted to just keep it as
+     * a private method
+     */
     private function dispatchMessage(mixed $message): void
     {
         try {

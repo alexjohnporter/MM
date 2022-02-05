@@ -26,18 +26,32 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
         return (int)$qb->getQuery()->getSingleScalarResult() > 0;
     }
 
-    public function getUnswipedProfilesForLoggedInUser(string $loggedInUserId): array
-    {
-        return $this->getEntityManager()->getConnection()->executeQuery(
-            "SELECT id, email, name, gender, age FROM user 
+    public function getUnswipedProfilesForLoggedInUser(
+        string $loggedInUserId,
+        int $minAge,
+        int $maxAge,
+        string | null $gender = null
+    ): array {
+        $sql = "SELECT id, email, name, gender, age FROM user 
                 WHERE id NOT IN 
                       (SELECT swiped_user_id
                       FROM user_swipe 
-                      WHERE logged_in_user_id = '753080bf-2213-4e2f-bb28-5ba8bba1100c'
+                      WHERE logged_in_user_id = :loggedInUserId
                     ) AND NOT id = :loggedInUserId
-                   ",
+                    AND age > :minAge
+                    AND age < :maxAge";
+
+        if ($gender) {
+            $sql .= ' AND gender = :gender';
+        }
+
+        return $this->getEntityManager()->getConnection()->executeQuery(
+            $sql,
             [
-                'loggedInUserId' => $loggedInUserId
+                'loggedInUserId' => $loggedInUserId,
+                'minAge' => $minAge,
+                'maxAge' => $maxAge,
+                'gender' => $gender
             ]
         )->fetchAllAssociative();
     }
