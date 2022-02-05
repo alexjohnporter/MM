@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Exception\UserDoesNotExistException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -28,7 +29,7 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
     public function getUnswipedProfilesForLoggedInUser(string $loggedInUserId): array
     {
         return $this->getEntityManager()->getConnection()->executeQuery(
-            "SELECT * FROM user 
+            "SELECT id, email, name, gender, age FROM user 
                 WHERE id NOT IN 
                       (SELECT swiped_user_id
                       FROM user_swipe 
@@ -39,6 +40,47 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
                 'loggedInUserId' => $loggedInUserId
             ]
         )->fetchAllAssociative();
+    }
+
+    public function isUserAuthenticated(string $userId, string $token): bool
+    {
+        $user = $this->getUserById($userId);
+
+        return
+            $user->getAuthToken() === $token &&
+            $user->getAuthTokenExpires() > new \DateTime('now');
+    }
+
+    public function getUserById(string $userId): User
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->where('u.id = :id')
+            ->setParameter('id', $userId)
+            ->getQuery();
+
+        $user = $qb->getOneOrNullResult();
+
+        if (!$user instanceof User) {
+            throw new UserDoesNotExistException($userId);
+        }
+
+        return $user;
+    }
+
+    public function getUserByEmail(string $email): User
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->where('u.email = :email')
+            ->setParameter('email', $email)
+            ->getQuery();
+
+        $user = $qb->getOneOrNullResult();
+
+        if (!$user instanceof User) {
+            throw new UserDoesNotExistException($email);
+        }
+
+        return $user;
     }
 
     public function save(User $user): void

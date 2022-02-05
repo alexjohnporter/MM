@@ -14,7 +14,7 @@ class AppFixtures extends Fixture
         $user = new User(
             Uuid::fromString('753080bf-2213-4e2f-bb28-5ba8bba1100c'),
             'foo@bar.com',
-            'foobar',
+            password_hash('foobar', PASSWORD_DEFAULT),
             'Foo Bar',
             User::MALE,
             30

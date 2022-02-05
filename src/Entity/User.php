@@ -35,6 +35,10 @@ class User implements \JsonSerializable
         private string $gender,
         #[ORM\Column(type: 'integer')]
         private int $age,
+        #[ORM\Column(type: 'string', nullable: true)]
+        private string | null $authToken = null,
+        #[ORM\Column(type: 'datetime', nullable: true)]
+        private \DateTime | null $authTokenExpires = null
     ) {
         if (!in_array($this->gender, self::GENDERS)) {
             throw new \DomainException(sprintf('Gender with key of %s is not in list', $this->gender));
@@ -69,6 +73,23 @@ class User implements \JsonSerializable
     public function getAge(): int
     {
         return $this->age;
+    }
+
+    public function getAuthToken(): string | null
+    {
+        return $this->authToken;
+    }
+
+    public function getAuthTokenExpires(): \DateTime | null
+    {
+        return $this->authTokenExpires;
+    }
+
+    public function authenticateUser(string $authToken): void
+    {
+        //todo - add logout
+        $this->authToken = $authToken;
+        $this->authTokenExpires = (new \DateTime('now'))->add(new \DateInterval('PT10M'));
     }
 
     public function jsonSerialize()

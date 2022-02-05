@@ -2,14 +2,22 @@ hello:
   path: /
   controller: App\Controller\UserController::hello
 
+login:
+  path: /login
+  controller: App\Controller\UserController::login
+  methods: POST
+
 create:
   path: /user/create
   controller: App\Controller\UserController::create
+  methods: POST|PUT
 
 swipe:
   path: /swipe/{loggedInUser}/{swipedUser}/{attracted}
   controller: App\Controller\UserController::swipe
+  methods: POST|PUT
 
 profiles:
-  path: /profiles/{loggedInUserId}
+  path: /profiles/{loggedInUser}
   controller: App\Controller\UserController::profiles
+  methods: GET|POST

@@ -29,7 +29,7 @@ class CreateUserFactory implements CreateUserFactoryInterface
         return new CreateUser(
             (string)Uuid::v4(),
             $faker->email,
-            $faker->password,
+            password_hash('foobar', PASSWORD_DEFAULT),
             $faker->name,
             $faker->randomElement([User::FEMALE, User::MALE, User::PREFER_NOT_TO_SAY]),
             rand(18, 99)
