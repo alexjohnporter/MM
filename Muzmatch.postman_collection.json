@@ -1,0 +1,183 @@
+{
+	"info": {
+		"_postman_id": "a7881be9-da73-4b86-a016-f587896d47f1",
+		"name": "Muzmatch",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Hello muzmatch",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}",
+					"host": [
+						"{{url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Profiles",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-AUTH-TOKEN",
+						"value": "{{Auth Token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/profiles/{{LoggedInUser}}?minAge=18&maxAge=99&gender=m&distance=ASC",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"profiles",
+						"{{LoggedInUser}}"
+					],
+					"query": [
+						{
+							"key": "minAge",
+							"value": "18"
+						},
+						{
+							"key": "maxAge",
+							"value": "99"
+						},
+						{
+							"key": "gender",
+							"value": "m"
+						},
+						{
+							"key": "distance",
+							"value": "ASC"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Swipe",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-AUTH-TOKEN",
+						"value": "{{Auth Token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/swipe/{{LoggedInUser}}/ecf3aff6-789f-4e77-ae7e-3616bbe0d4c2/yes",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"swipe",
+						"{{LoggedInUser}}",
+						"ecf3aff6-789f-4e77-ae7e-3616bbe0d4c2",
+						"yes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/user/create",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "foo@bar.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "foobar",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"login"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Gallery",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-AUTH-TOKEN",
+						"value": "{{Auth Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/Users/alexporter/Desktop/screenshots/Screenshot 2021-07-16 at 09.11.20.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/user/gallery/{{LoggedInUser}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user",
+						"gallery",
+						"{{LoggedInUser}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -193,9 +193,17 @@ class UserController extends AbstractController
         }
 
         try {
+            $this->authenticateUser($request, $loggedInUser);
+
             $this->dispatchMessage(
                 new UploadImage($loggedInUser, $uploadedFile)
             );
+        } catch (AuthenticationException $e) {
+            return new JsonResponse([
+                'message' => 'User is not authenticated',
+                'code' => JsonResponse::HTTP_FORBIDDEN,
+                'data' => []
+            ], JsonResponse::HTTP_FORBIDDEN);
         } catch (FileException $t) {
             return new JsonResponse([
                 'message' => 'Wrong file type uploaded',
