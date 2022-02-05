@@ -9,6 +9,7 @@
 /vendor/
 .idea/
 /docker/mysql/*
+/photos/*
 ###< symfony/framework-bundle ###
 
 ###> squizlabs/php_codesniffer ###

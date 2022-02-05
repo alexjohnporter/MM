@@ -4,27 +4,30 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Builder\ProfileListBuilder;
+use App\Builder\ProfileListBuilderInterface;
 use App\Exception\InvalidPasswordException;
 use App\Exception\UnknownParameterException;
 use App\Exception\UserAlreadySwipedException;
 use App\Exception\UserDoesNotExistException;
 use App\Factory\CreateUserFactoryInterface;
 use App\Factory\SwipeUserFactoryInterface;
+use App\Message\UploadImage;
 use App\Service\AuthenticationServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use App\Exception\AuthenticationException;
 
 class UserController extends AbstractController
 {
     public function __construct(
         private CreateUserFactoryInterface $createUserFactory,
         private SwipeUserFactoryInterface $swipeUserFactory,
-        private ProfileListBuilder $profileListBuilder,
+        private ProfileListBuilderInterface $profileListBuilder,
         private AuthenticationServiceInterface $authenticationService,
         private MessageBusInterface $messageBus
     ) {
@@ -119,7 +122,7 @@ class UserController extends AbstractController
             ], JsonResponse::HTTP_FORBIDDEN);
         } catch (\Throwable $t) {
             return new JsonResponse([
-                'message' => $t->getMessage(),
+                'message' => 'An error occurred',
                 'code' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
                 'data' => []
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
@@ -177,6 +180,43 @@ class UserController extends AbstractController
         ]);
     }
 
+    public function gallery(Request $request, string $loggedInUser): JsonResponse
+    {
+        $uploadedFile = $request->files->get('image');
+
+        if (!$uploadedFile instanceof UploadedFile) {
+            return new JsonResponse([
+                'message' => 'No image uploaded',
+                'code' => JsonResponse::HTTP_PRECONDITION_FAILED,
+                'data' => []
+            ], JsonResponse::HTTP_PRECONDITION_FAILED);
+        }
+
+        try {
+            $this->dispatchMessage(
+                new UploadImage($loggedInUser, $uploadedFile)
+            );
+        } catch (FileException $t) {
+            return new JsonResponse([
+                'message' => 'Wrong file type uploaded',
+                'code' => JsonResponse::HTTP_BAD_REQUEST,
+                'data' => []
+            ], JsonResponse::HTTP_BAD_REQUEST);
+        } catch (\Throwable $t) {
+            return new JsonResponse([
+                'message' => $t->getMessage(),
+                'code' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'data' => []
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return new JsonResponse([
+            'message' => 'Image uploaded successfully',
+            'code' => JsonResponse::HTTP_OK,
+            'data' => []
+        ]);
+    }
+
     /**
      * I'd turn this into a trait for use in other controllers
      * but seeing as there is only one controller, I've opted to just keep it as
@@ -201,7 +241,7 @@ class UserController extends AbstractController
         $token = $request->headers->get('X-AUTH-TOKEN', '');
 
         if (!$this->authenticationService->isUserAuthenticated($userId, $token)) {
-            throw new AuthenticationException();
+            throw new AuthenticationException('Could not authenticate user');
         }
     }
 }

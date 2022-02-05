@@ -21,3 +21,8 @@ profiles:
   path: /profiles/{loggedInUser}
   controller: App\Controller\UserController::profiles
   methods: GET|POST
+
+gallery:
+  path: /user/gallery/{loggedInUser}
+  controller: App\Controller\UserController::gallery
+  methods: POST|PUT

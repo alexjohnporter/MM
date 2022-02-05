@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\MessageHandler;
 
-use App\Entity\UserSwipe;
 use App\Exception\UserAlreadySwipedException;
 use App\Message\SwipeUser;
 use App\Repository\UserSwipeRepository;
@@ -29,8 +28,6 @@ class SwipeUserHandler
         ) {
             throw new UserAlreadySwipedException($message->getLoggedInUser(), $message->getSwipedUser());
         }
-
-//        dump($message); exit;
 
         $this->userSwipeRepository->save(
             (string)Uuid::v4(),

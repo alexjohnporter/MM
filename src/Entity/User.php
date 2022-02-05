@@ -43,7 +43,9 @@ class User implements \JsonSerializable
         #[ORM\Column(type: 'string', nullable: true)]
         private string | null $authToken = null,
         #[ORM\Column(type: 'datetime', nullable: true)]
-        private \DateTime | null $authTokenExpires = null
+        private \DateTime | null $authTokenExpires = null,
+        #[ORM\Column(type: 'string', nullable: true)]
+        private string | null $profilePhoto = null
     ) {
         if (!in_array($this->gender, self::GENDERS)) {
             throw new \DomainException(sprintf('Gender with key of %s is not in list', $this->gender));
@@ -104,6 +106,16 @@ class User implements \JsonSerializable
         $this->authTokenExpires = (new \DateTime('now'))->add(new \DateInterval('PT10M'));
     }
 
+    public function getProfilePhoto(): string | null
+    {
+        return $this->profilePhoto;
+    }
+
+    public function addPhoto(string $photo): void
+    {
+        $this->profilePhoto = $photo;
+    }
+
     public function jsonSerialize()
     {
         return [
@@ -111,7 +123,8 @@ class User implements \JsonSerializable
            'name' => $this->name,
            'email' => $this->email,
            'age' => $this->age,
-           'gender' => $this->gender
+           'gender' => $this->gender,
+            'profilePhoto' => $this->profilePhoto
         ];
     }
 }

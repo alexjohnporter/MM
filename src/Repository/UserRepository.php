@@ -48,8 +48,8 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
                       FROM user_swipe 
                       WHERE logged_in_user_id = :loggedInUserId
                     ) AND NOT id = :loggedInUserId
-                    AND age > :minAge
-                    AND age < :maxAge ";
+            AND age > :minAge
+            AND age < :maxAge ";
 
         if ($gender) {
             $sql .= ' AND gender = :gender ';
@@ -66,8 +66,6 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
                 'minAge' => $minAge,
                 'maxAge' => $maxAge,
                 'gender' => $gender,
-                'lat' => $lat,
-                'lon' => $lon,
             ]
         )->fetchAllAssociative();
     }

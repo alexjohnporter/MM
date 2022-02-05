@@ -8,7 +8,7 @@ use App\Entity\User;
 use App\Exception\UserDoesNotExistException;
 use App\Repository\UserRepositoryInterface;
 
-class ProfileListBuilder
+class ProfileListBuilder implements ProfileListBuilderInterface
 {
     public function __construct(
         private UserRepositoryInterface $userRepository
