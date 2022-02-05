@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Builder\ProfileListBuilder;
 use App\Entity\User;
 use App\Exception\UnknownParameterException;
 use App\Exception\UserAlreadySwipedException;
@@ -22,6 +23,7 @@ class UserController extends AbstractController
     public function __construct(
         private CreateUserFactoryInterface $createUserFactory,
         private SwipeUserFactoryInterface $swipeUserFactory,
+        private ProfileListBuilder $profileListBuilder,
         private MessageBusInterface $messageBus
     ) {
     }
@@ -44,18 +46,15 @@ class UserController extends AbstractController
         ]);
     }
 
-    public function profiles(UserRepository $userRepository): JsonResponse
+    public function profiles(string $loggedInUserId): JsonResponse
     {
-        $users = $userRepository->findAll();
+        $userList = $this->profileListBuilder->getUnswipedProfilesForLoggedInUser($loggedInUserId);
 
-        $userList = [];
-
-        /** @var User $user */
-        foreach ($users as $user) {
-            $userList[] = $user->jsonSerialize();
-        }
-
-        return new JsonResponse($userList);
+        return new JsonResponse([
+            'message' => 'Unswiped users fetched successfully',
+            'code' => JsonResponse::HTTP_OK,
+            'data' => $userList
+        ]);
     }
 
     public function swipe(string $loggedInUser, string $swipedUser, string $attracted): JsonResponse

@@ -11,5 +11,5 @@ swipe:
   controller: App\Controller\UserController::swipe
 
 profiles:
-  path: /profiles
+  path: /profiles/{loggedInUserId}
   controller: App\Controller\UserController::profiles

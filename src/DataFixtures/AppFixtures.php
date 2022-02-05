@@ -12,7 +12,7 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $user = new User(
-            Uuid::v4(),
+            Uuid::fromString('753080bf-2213-4e2f-bb28-5ba8bba1100c'),
             'foo@bar.com',
             'foobar',
             'Foo Bar',

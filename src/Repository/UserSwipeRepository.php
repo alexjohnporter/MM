@@ -37,7 +37,7 @@ class UserSwipeRepository extends ServiceEntityRepository implements UserSwipeRe
         string $id,
         string $loggedInUser,
         string $swipedUser,
-        bool $attracted,
+        int $attracted,
         \DateTime $swipedAt
     ): void {
         $this

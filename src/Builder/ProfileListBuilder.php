@@ -4,13 +4,22 @@ declare(strict_types=1);
 
 namespace App\Builder;
 
+use App\Exception\UserDoesNotExistException;
+use App\Repository\UserRepositoryInterface;
+
 class ProfileListBuilder
 {
-    /**
-     * @return string[]
-     */
-    public function getUnswipedProfiles(): array
+    public function __construct(
+        private UserRepositoryInterface $userRepository
+    ) {
+    }
+
+    public function getUnswipedProfilesForLoggedInUser(string $loggedInUserId): array
     {
-        return ['foo', 'bar'];
+        if (!$this->userRepository->doesUserExist($loggedInUserId)) {
+            throw new UserDoesNotExistException($loggedInUserId);
+        }
+
+        return $this->userRepository->getUnswipedProfilesForLoggedInUser($loggedInUserId);
     }
 }

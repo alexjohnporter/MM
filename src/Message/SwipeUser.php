@@ -9,7 +9,7 @@ class SwipeUser
     public function __construct(
         private string $loggedInUser,
         private string $swipedUser,
-        private bool $attracted
+        private int $attracted
     ) {
     }
 
@@ -23,7 +23,7 @@ class SwipeUser
         return $this->swipedUser;
     }
 
-    public function isAttracted(): bool
+    public function isAttracted(): int
     {
         return $this->attracted;
     }

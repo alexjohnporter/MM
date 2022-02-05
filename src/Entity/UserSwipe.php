@@ -12,13 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: UserSwipeRepository::class)]
 class UserSwipe
 {
-    public const NO = false;
-    public const YES = true;
-
-    public const ACCEPTED_ATTRACTED_VALUES = [
-        'yes',
-        'no'
-    ];
+    public const YES = 1;
+    public const NO = 0;
 
     public const ATTRACTED_VALUES_MAPPING = [
         'yes' => self::YES,
@@ -35,8 +30,8 @@ class UserSwipe
         #[ORM\ManyToOne(targetEntity: "App\Entity\User", cascade: ["all"], fetch: "EAGER")]
         #[ORM\JoinColumn(nullable: false)]
         private User $swipedUser,
-        #[ORM\Column(type: "boolean")]
-        private bool $attracted,
+        #[ORM\Column(type: "integer", length: 1)]
+        private int $attracted,
         #[ORM\Column(type: "datetime")]
         private DateTime $swipedAt
     ) {
@@ -58,7 +53,7 @@ class UserSwipe
     }
 
 
-    public function isAttracted(): bool
+    public function isAttracted(): int
     {
         return $this->attracted;
     }

@@ -22,7 +22,7 @@ class SwipeUserFactory implements SwipeUserFactoryInterface
         $this->checkUserExists($loggedInUser);
         $this->checkUserExists($swipedUser);
 
-        if (!in_array(strtolower($attracted), UserSwipe::ACCEPTED_ATTRACTED_VALUES)) {
+        if (!array_key_exists(strtolower($attracted), UserSwipe::ATTRACTED_VALUES_MAPPING)) {
             throw new UnknownParameterException('attracted', $attracted);
         }
 

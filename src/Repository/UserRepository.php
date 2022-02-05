@@ -25,6 +25,22 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
         return (int)$qb->getQuery()->getSingleScalarResult() > 0;
     }
 
+    public function getUnswipedProfilesForLoggedInUser(string $loggedInUserId): array
+    {
+        return $this->getEntityManager()->getConnection()->executeQuery(
+            "SELECT * FROM user 
+                WHERE id NOT IN 
+                      (SELECT swiped_user_id
+                      FROM user_swipe 
+                      WHERE logged_in_user_id = '753080bf-2213-4e2f-bb28-5ba8bba1100c'
+                    ) AND NOT id = :loggedInUserId
+                   ",
+            [
+                'loggedInUserId' => $loggedInUserId
+            ]
+        )->fetchAllAssociative();
+    }
+
     public function save(User $user): void
     {
         $this->_em->persist($user);

@@ -30,6 +30,8 @@ class SwipeUserHandler
             throw new UserAlreadySwipedException($message->getLoggedInUser(), $message->getSwipedUser());
         }
 
+//        dump($message); exit;
+
         $this->userSwipeRepository->save(
             (string)Uuid::v4(),
             $message->getLoggedInUser(),
