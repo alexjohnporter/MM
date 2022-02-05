@@ -39,8 +39,10 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
 
         $sql = "SELECT id, email, name, gender, age, lat, lon, 
             (3959 * acos(cos(radians('" . $lat . "')) * cos(radians(lat)) * cos(radians(lon) - 
-            radians('" . $lon . "')) + sin(radians('" . $lat . "')) * sin(radians(lat)))) AS distance 
-                FROM user 
+            radians('" . $lon . "')) + sin(radians('" . $lat . "')) * sin(radians(lat)))) AS distance, 
+            (SELECT COUNT(us.id) from user_swipe us WHERE us.swiped_user_id = u.id AND us.attracted = 1) 
+            as attractiveness
+                FROM user u
                 WHERE id NOT IN 
                       (SELECT swiped_user_id
                       FROM user_swipe 
@@ -53,7 +55,9 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
             $sql .= ' AND gender = :gender ';
         }
 
-        $sql .= $distanceSort === 'DESC' ? 'ORDER BY distance DESC' : 'ORDER BY distance ASC';
+        $sql .= $distanceSort === 'DESC' ?
+            'ORDER BY attractiveness DESC, distance DESC' :
+            'ORDER BY attractiveness DESC,distance ASC';
 
         return $this->getEntityManager()->getConnection()->executeQuery(
             $sql,

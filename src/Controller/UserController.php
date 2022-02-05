@@ -119,7 +119,7 @@ class UserController extends AbstractController
             ], JsonResponse::HTTP_FORBIDDEN);
         } catch (\Throwable $t) {
             return new JsonResponse([
-                'message' => 'An error has occurred',
+                'message' => $t->getMessage(),
                 'code' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
                 'data' => []
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
