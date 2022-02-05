@@ -27,6 +27,7 @@ class CreateUserFactory implements CreateUserFactoryInterface
     {
         $faker = Factory::create();
 
+        //these are some random coords dotted about London
         $allowedCoords = [
             new Coordinates(51.520199, -0.120467),
             new Coordinates(51.513349, -0.132430),
