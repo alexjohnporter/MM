@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Exception\InvalidPasswordException;
 use App\Repository\UserRepositoryInterface;
+use App\Util\TokenGeneratorInterface;
 
 /**
  * In a real production setting, I'd use something like a JWT or oAuth2
@@ -13,7 +14,8 @@ use App\Repository\UserRepositoryInterface;
 class AuthenticationService implements AuthenticationServiceInterface
 {
     public function __construct(
-        private UserRepositoryInterface $userRepository
+        private UserRepositoryInterface $userRepository,
+        private TokenGeneratorInterface $tokenGenerator
     ) {
     }
 
@@ -25,7 +27,8 @@ class AuthenticationService implements AuthenticationServiceInterface
             throw new InvalidPasswordException();
         }
 
-        $token = bin2hex(random_bytes(32));
+        $token = $this->tokenGenerator->generateToken();
+
         $user->authenticateUser($token);
 
         $this->userRepository->save($user);

@@ -27,3 +27,5 @@ I've gone between using Doctrine & plain SQL - normally, I'd try to be a bit mor
 I've used the Command Handler pattern (or Message Handler if you are Symfony) in the controller to deal with data manipulation as I like to keep my controllers as thin as possible.
 
 There are areas of this code that are probably over-engineered for a simple API by using Factories but this was to highlight the way I'd normally develop, especially if more logic is required. Testing the factory is creating the correct message is also better than testing it via the controller, which really should be done as part of an integration test.
+
+Images can be uploaded by using the form-data panel on Postman with the key of `image` and type `file`.

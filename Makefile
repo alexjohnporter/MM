@@ -18,3 +18,6 @@ migration:
 
 setup:
 	docker-compose run php make migration
+
+test:
+	vendor/bin/phpunit

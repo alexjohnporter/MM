@@ -6,7 +6,7 @@ namespace App\MessageHandler;
 
 use App\Exception\UserAlreadySwipedException;
 use App\Message\SwipeUser;
-use App\Repository\UserSwipeRepository;
+use App\Repository\UserSwipeRepositoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Uid\Uuid;
 
@@ -14,7 +14,7 @@ use Symfony\Component\Uid\Uuid;
 class SwipeUserHandler
 {
     public function __construct(
-        private UserSwipeRepository $userSwipeRepository
+        private UserSwipeRepositoryInterface $userSwipeRepository
     ) {
     }
 

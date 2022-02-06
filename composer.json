@@ -75,7 +75,9 @@
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "fakerphp/faker": "^1.19",
+        "phpspec/prophecy-phpunit": "^2.0",
         "phpstan/phpstan": "^1.4",
+        "phpunit/phpunit": "^9.5",
         "squizlabs/php_codesniffer": "*"
     }
 }
