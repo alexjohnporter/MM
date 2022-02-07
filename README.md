@@ -9,7 +9,7 @@
 
 # Development notes
 
-The "loggedInUser" id is `753080bf-2213-4e2f-bb28-5ba8bba1100c`. This has been set up in fixtures and will always have this ID.
+The "loggedInUser" postman variable id is `753080bf-2213-4e2f-bb28-5ba8bba1100c`. This has been set up in fixtures and will always have this ID.
 
 There are no users created on set up, so navigate to `/user/create` to create as many users as you want.
 

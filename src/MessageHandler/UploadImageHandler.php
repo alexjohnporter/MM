@@ -39,7 +39,7 @@ class UploadImageHandler
         //todo - install php-gd to do the image manipulation
 
         $file->move($this->rootDir . '/photos', $filename);
-        $user->addPhoto($filename);
+        $user->addPhoto('/photos/' . $filename);
         $this->userRepository->save($user);
     }
 }

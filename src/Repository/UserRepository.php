@@ -37,7 +37,7 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
         $lat = $loggedInUser->getCoordinates()->getLat();
         $lon = $loggedInUser->getCoordinates()->getLon();
 
-        $sql = "SELECT id, email, name, gender, age, lat, lon, 
+        $sql = "SELECT id, email, name, gender, age, lat, lon, profile_photo, 
             (3959 * acos(cos(radians('" . $lat . "')) * cos(radians(lat)) * cos(radians(lon) - 
             radians('" . $lon . "')) + sin(radians('" . $lat . "')) * sin(radians(lat)))) AS distance, 
             (SELECT COUNT(us.id) from user_swipe us WHERE us.swiped_user_id = u.id AND us.attracted = 1) 

@@ -53,8 +53,6 @@ class UserController extends AbstractController
 
     public function login(Request $request): JsonResponse
     {
-        //todo - could add a check to this function to see if the user is already logged in
-
         $email = $request->get('email');
         $password = $request->get('password');
 
